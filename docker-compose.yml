@@ -1,0 +1,24 @@
+version: "3.3"
+
+services:
+  my-localstack:
+    container_name: my-localstack
+    image: localstack/localstack
+    ports:
+      - "4566-4620:4566-4620"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=lambda,sqs
+      - DEFAULT_REGION=us-west-2
+      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_REMOTE_DOCKER=true
+      - LAMBDA_REMOVE_CONTAINERS=true
+      - DATA_DIR=${DATA_DIR- }
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEBUG=${DEBUG- }
+      - PORT_WEB_UI=${PORT_WEB_UI- }
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - /var/run/docker.sock:/var/run/docker.sock
